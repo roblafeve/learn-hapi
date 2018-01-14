@@ -9,9 +9,10 @@ const server = Hapi.server({
 // Add the route
 server.route({
   method: "GET",
-  path: "/",
-  handler: function(request, h) {
-    return "<h1>Hello, world!</h1>";
+  path: "/{name?}",
+  handler: function(r) {
+    const { params: { name } } = r;
+    return `<h1>Hello, ${name || "World"}!</h1>`;
   }
 });
 
@@ -41,11 +42,11 @@ async function start() {
     });
     await server.start();
   } catch (err) {
-    console.log(err);
+    server.log(err);
     process.exit(1);
   }
 
-  console.log("Server running at:", server.info.uri);
+  server.log("Server running at:", server.info.uri);
 }
 
 start();
